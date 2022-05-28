@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0%;
+            padding: 0%;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+        #box{
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            width: 90vw;
+            margin: auto;
+            gap: 1vw;
+        }
+        #box > div{
+            border: 1px solid #cecece;
+            border-radius: 10px;
+            width: 20vw;
+            padding: 1vw;
+            justify-content: left;
+        }
+        #box > div > button{
+            padding: 1vh 2vh;
+            border-radius: 5px;
+        }
+        #inpBox{
+            display: flex;
+            padding: 1vw;
+            width: 30vw;
+            justify-content: space-around;
+        }
+        .hide{
+            display: none;
+         
+        }
+        .block{
+            display: block;
+            border: 1px solid #cecece;
+            border-radius: 5px;
+            margin-top: 2vh;
+            padding: 1vw;
+        }
+    </style>
+</head>
+<body>
+ <div id="inpBox">
+     <h1>Fill The Data</h1>
+    <input type="text" id="task" placeholder="Name of the task" >
+    <input type="checkbox"  id="check" value="false" onclick="changeValue()">
+    <input type="submit" onclick="add()">
+ </div>
+
+    <div id="box"></div>
+
+</body>
+</html>
+<script>
+    const changeValue = ()=>{
+        document.getElementById("check").value=true
+    }
+    let count=0
+    function add()
+{   
+    let title=document.getElementById("task").value
+        let status=document.getElementById("check").value
+        // let id=count
+        // count++
+  let data = {title,status}
+  
+    async function pushdata()
+    {
+        try
+        {
+            let res = await fetch("http://localhost:3000/tasks",
+            {
+                method:"POST",
+               body:JSON.stringify(data),
+              headers:{
+             "Content-Type":"application/json"
+         }
+            })
+        }
+        catch(error)
+        {
+            console.log(error)
+        }
+    }
+    pushdata()
+}
+
+    async function get (){
+try {
+    let res=await fetch (`http://localhost:3000/tasks`)
+    let data=await res.json()
+    console.log(data)
+    display(data)
+} catch (error) {
+    console.log(error)
+}
+
+    }
+    get()
+
+    let box=document.getElementById("box")
+    box.innerHTML=``
+    const display=(data)=>{
+       data.forEach((data) => {
+        console.log(data)
+        let div=document.createElement('div')
+        let h31=document.createElement("h3")
+        h31.textContent=`Title :    ${data.title}`
+        let h32=document.createElement("h3")
+        h32.textContent=`Status :   ${data.status}`
+        let del=document.createElement('button')
+        del.onclick=async function (){
+            let a=await fetch(`http://localhost:3000/tasks/${data.id}`,{
+                method:"DELETE"
+            })
+            display(data)
+        }
+        let edit=document.createElement("button")
+        edit.textContent='Edit'
+        
+        let subEdit=document.createElement("button")
+        subEdit.textContent='Submit Your edit'
+        del.innerHTML="Delete"
+        let editinp=document.createElement("input")
+        editinp.setAttribute("class","hide")
+        subEdit.setAttribute("class","hide")
+
+        subEdit.onclick=()=>{
+            patchData(editinp.value,data.status,data.id)
+        }
+
+        edit.onclick=()=>{
+            editinp.setAttribute("class","block")   
+            subEdit.setAttribute("class","block")  
+        }
+        div.append(h31,h32,del,edit,editinp,subEdit)
+        box.append(div)
+       });
+    }
+
+const patchData =(ele,status,id)=>{
+    console.log(ele)
+    let d = {
+        title:ele,
+        status:status,
+   }
+   async function Addto()
+   {
+       try {
+        let res = await fetch(`http://localhost:3000/tasks/${id}`,
+       {
+        method:"PUT",
+               body:JSON.stringify(d),
+              headers:{
+             "Content-Type":"application/json" } 
+       })
+       let data = await res.json()
+       console.log(data)
+       } catch (error) {
+           console.log(error)
+       }
+   }
+   Addto()
+}
+
+
+
+
+</script>
