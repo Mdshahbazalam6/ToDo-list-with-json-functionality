@@ -156,7 +156,7 @@ const patchData =(ele,status,id)=>{
    }
    async function Addto()
    {
-       try {
+try {       
         let res = await fetch(`http://localhost:3000/tasks/${id}`,
        {
         method:"PUT",
@@ -172,8 +172,4 @@ const patchData =(ele,status,id)=>{
    }
    Addto()
 }
-
-
-
-
 </script>

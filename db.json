@@ -1,7 +1,7 @@
 {
   "tasks": [
     {
-      "title": "Buy Bread",
+      "title": "pulse",
       "status": false,
       "id": 2
     },
@@ -16,7 +16,7 @@
       "id": 4
     },
     {
-      "title": "banana",
+      "title": "lichi",
       "status": "false",
       "id": 6
     },
@@ -24,6 +24,16 @@
       "title": "sugar",
       "status": "true",
       "id": 7
+    },
+    {
+      "title": "Tomato",
+      "status": "false",
+      "id": 8
+    },
+    {
+      "title": "exercise",
+      "status": "true",
+      "id": 9
     }
   ]
 }
